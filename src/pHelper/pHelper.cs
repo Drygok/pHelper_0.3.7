@@ -155,7 +155,7 @@ namespace pHelper
 
         private void label1_Click(object sender, EventArgs e)
         {
-            Process.Start("https://vk.com/iddrygok");
+            Process.Start("https://vk.com/Drygok");
         }
 
         private void comboBox_game_SelectedIndexChanged(object sender, EventArgs e)

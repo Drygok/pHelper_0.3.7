@@ -292,9 +292,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(5, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(311, 29);
+            this.label1.Size = new System.Drawing.Size(290, 29);
             this.label1.TabIndex = 5;
-            this.label1.Text = "Автор: vk.com/idDrygok";
+            this.label1.Text = "Автор: vk.com/Drygok";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // comboBox_game

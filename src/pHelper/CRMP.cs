@@ -27,7 +27,7 @@ namespace pHelper
         [DllImport("user32.dll")]
         static extern int GetWindowText(int hWnd, StringBuilder text, int count);
 
-        public IntPtr dwSAMP = (IntPtr)0x0, dwGTA = (IntPtr)0x0, handle = (IntPtr)0x0;
+        public IntPtr dwSAMP = (IntPtr)0x0, handle = (IntPtr)0x0;
         public int pID = 0;
 
         private bool InitCR()
@@ -35,23 +35,27 @@ namespace pHelper
             if (handle != (IntPtr)0x0) CloseHandle(handle);
 
             dwSAMP = (IntPtr)0x0;
-            dwGTA = (IntPtr)0x0;
             handle = (IntPtr)0x0;
             
-            Process[] proc = Process.GetProcessesByName(pHelper.GameName[pHelper.getGameVersion()]);
-            foreach (Process process in proc)
+            Process[] processes = Process.GetProcessesByName(pHelper.GameName[pHelper.getGameVersion()]);
+            for (int p = 0; p < processes.Length; p++)
             {
+                Process process = processes[p];
                 pID = process.Id;
                 handle = OpenProcess(0x001F0FFF, false, pID);
                 ProcessModuleCollection modules = process.Modules;
                 foreach (ProcessModule i in modules)
                 {
-                    if (i.ModuleName == pHelper.GameName[pHelper.getGameVersion()]) dwGTA = (IntPtr)i.BaseAddress.ToInt32();
                     if (i.ModuleName == pHelper.MPName[pHelper.getGameVersion()]) dwSAMP = (IntPtr)i.BaseAddress.ToInt32();
-                    if ((pID == 0) & (dwSAMP == (IntPtr)0x0) && (dwGTA == (IntPtr)0x0)) return true;
+                    // сюда можно добавить другие модули при необходимости
+                    if ((pID != 0) && (dwSAMP != (IntPtr)0x0)) return true; 
+                    // вряд ли кто-то запустит два процесса игры одновременно (она этого не позволит), поэтому считаем за игру первый процесс с подходящим именем и подгруженным модулем мультиплеера
                 }
-                MessageBox.Show($"Модуль мультиплеера \"{pHelper.MPName[pHelper.getGameVersion()]}\" не найден.\nВозможно, Вы зашли в одиночную игру?", "pHelper");
-                return false;
+                if (p == processes.Length - 1) // если процессов с таким именем больше одного - переберать следует все, а ошибку выдать только на последнем
+                {
+                    MessageBox.Show($"Модуль мультиплеера \"{pHelper.MPName[pHelper.getGameVersion()]}\" не найден.\nВозможно, Вы зашли в одиночную игру?\n\nПодробности:\npID: {pID}\ndwSAMP: {dwSAMP}", "pHelper");
+                    return false;
+                }
             }
             MessageBox.Show($"Процесс \"{pHelper.GameName[pHelper.getGameVersion()]}\" не найден.\nВозможно, игра закрыта?", "pHelper");
             return false;
