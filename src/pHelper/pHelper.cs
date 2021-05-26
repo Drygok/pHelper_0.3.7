@@ -8,8 +8,8 @@ namespace pHelper
 {
     public partial class pHelper : Form
     {
-        public static string[] GameName { get; } = { "gta_amazing", "gta_sa" };
-        public static string[] MPName { get; } = { "samp.dll", "samp.dll" };
+        public static string[] GameName { get; } = { "amazing", "gta_sa" };
+        public static string[] MPName { get; } = { "azmp.dll", "samp.dll" };
         private static int GameVersion = -1;
 
         public static int getGameVersion()
